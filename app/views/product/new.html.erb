@@ -1,0 +1,79 @@
+<%= content_for(:css) do %>
+
+<%= stylesheet_link_tag 'dropzone' %>
+<%= stylesheet_link_tag 'basic' %>
+<% end %>
+
+<%=content_for(:content) do %>
+  <div class="container">
+    <br>
+    <div class="row">
+      <%= form_for :request, :url => request.base_url+'/product/create', html: {id:'myForm'} do %>
+      <label for="name">Question</label>
+      <input type="text" name="name" id="name" class="form-control">
+      <label for description> Description</label>
+      <input type="text" name="description" id="description" class="form-control" /><br>
+      <input type=hidden name="files_list" id='fileslist'>
+      </form>
+
+      <form action="upload" class="dropzone" id="myDropzone">
+        <div class="fallback">
+           <input name="file" type="file" id="file" enctype="multipart/form-data" />
+          <div class="dz-message needsclick">
+            <strong>Drop files here or click to upload</strong><br>
+            <span class="note needsclick" />
+          </div>
+
+        </div>
+      </form>
+
+
+      <div id="msgBoard"></div>
+      <br>
+      <input action="create" type='submit' value="Create your question">
+    </div>
+  </div>
+
+  <% end %>
+<% end %>
+
+
+<%= content_for(:javascript) do %>
+<%= javascript_include_tag "dropzone" %>
+<!-- include the dropzone library itself. -->
+  <script type="text/javascript">
+  //the Javascript necessary to handle the drag and drop events and upload the form
+    var AUTH_TOKEN=$('meta[name="csrf-token"]').attr('content');
+    //Grab the CSRF token by jQuery and save it in AUTH_TOKEN variable
+    Dropzone.autoDiscover = false;
+    var myDropzone = new Dropzone("div#mydropzone",{
+      url: "<%= request.base_url %>/uploadfiles",
+      autoProcessQueue: false,
+      uploadMultiple: true,
+      addRemoveLinks:true,
+      parallelUploads:10,
+      params:{
+        'authenticity_token':  AUTH_TOKEN
+      },
+      successmultiple: function(data,response){
+        $('#msgBoard').append(response.message).addClass("alert alert-success");
+        $('#msgBoard').delay(2000).fadeOut();
+        $('#fileslist').val(response.filesList);
+        $('#myForm').off('submit').submit();
+      }
+    });
+
+    // ActionController::InvalidAuthenticityToken in ProductController#upload
+
+    $('#myForm').submit(function(e){
+    if(myDropzone.getQueuedFiles().length > 0){
+      e.preventDefault();
+      myDropzone.processQueue();
+    }
+  });
+  </script>
+<% end %>
+
+<% if flash.notice %>
+  <div class="alert alert-success"><P><%= flash.notice %></p></div>
+<% end %>
