@@ -1,10 +1,9 @@
-class CreatePics < ActiveRecord::Migration[5.1]
-
+class CreatePics < ActiveRecord::Migration[4.2]
   def change
     create_table :pics do |t|
-        t.integer :product_id, index: true
+        t.references :product, index: true
         t.text :name
-        belongs_to :product
+
         t.timestamps null: false
       end
     add_foreign_key :pics, :products

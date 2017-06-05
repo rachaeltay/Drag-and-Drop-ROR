@@ -13,7 +13,7 @@ gem 'sqlite3'
 
 gem 'carrierwave'
 
-gem 'wdm', '>= 0.1.0'
+# gem 'wdm', '>= 0.1.0'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 # Use SCSS for stylesheets

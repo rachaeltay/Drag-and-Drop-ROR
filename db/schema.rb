@@ -20,4 +20,7 @@ ActiveRecord::Schema.define(version: 20170601171223) do
     t.index ["product_id"], name: "index_pics_on_product_id"
   end
 
+  create_table "products", force: :cascade do |t|
+  end
+
 end
