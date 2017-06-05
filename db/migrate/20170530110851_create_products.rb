@@ -1,3 +1,8 @@
-class Product < ActiveRecord::Base
-  has_many :pics
+class CreateProducts < ActiveRecord::Migration[4.2]
+
+  def change
+    create_table :products do |t|
+    end
+  end
+
 end
