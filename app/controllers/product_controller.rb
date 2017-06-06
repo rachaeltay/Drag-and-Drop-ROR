@@ -16,21 +16,21 @@ class ProductController < ApplicationController
 
   def upload
     # byebug
-    uploaded_pics = params[:file] # Take the files which are sent by HTTP POST request.
-    time_footprint = Time.now.to_i.to_formatted_s(:number) # Generate a unique number to rename the files to prevent duplication
+    pic = params[:file] # Take the files which are sent by HTTP POST request.
+    time_footprint = Time.now.to_i.to_s(:number) # Generate a unique number to rename the files to prevent duplication
 
-    uploaded_pics.each do |pic|
-      File.open(Rails.root.join('public', 'uploads', pic[1].original_filename), 'wb') do |file|
-        file.write(pic[1].read)
-        File.rename(file, 'public/uploads/' + time_footprint + pic[1].original_filename)
-      end
+
+    File.open(Rails.root.join('public', 'uploads', pic.original_filename), 'wb') do |file|
+      file.write(pic.read)
+      File.rename(file, 'public/uploads/' + time_footprint + pic.original_filename)
     end
+
     files_list = Dir['public/uploads/*'].to_json #get a list of all files in the {public/uploads} directory and make a JSON to pass to the server
-    render json: { message: 'You have successfully uploded your images.', files_list: files_list } #return a JSON object amd success message if uploading is successful
+    render json: { message: 'You have successfully uploaded your images.', files_list: files_list } #return a JSON object amd success message if uploading is successful
   end
 
-  private
-    def params
-      params.require(:product).permit(:files_list, :name, :description, :file)
-    end
+#  private
+#    def product_params
+#      params.require(:product).permit(:files_list, :name, :description, :file)
+#    end
 end
