@@ -12,3 +12,5 @@
 //
 //= require rails-ujs
 //= require dropzone.js
+//= require jquery
+//= require jquery_ujs

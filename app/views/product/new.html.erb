@@ -14,23 +14,11 @@
       <label for description> Description</label>
       <input type="text" name="description" id="description" class="form-control" /><br>
       <input type=hidden name="files_list" id='fileslist'>
-      </form>
-
-      <form action="upload" class="dropzone" id="myDropzone">
-        <div class="fallback">
-           <input name="file" type="file" id="file" enctype="multipart/form-data" />
-          <div class="dz-message needsclick">
-            <strong>Drop files here or click to upload</strong><br>
-            <span class="note needsclick" />
-          </div>
-
-        </div>
-      </form>
-
-
+      <div class="dropzone" id="myDropzone"></div>
       <div id="msgBoard"></div>
       <br>
       <input action="create" type='submit' value="Create your question">
+      </form>
     </div>
   </div>
 
@@ -46,8 +34,8 @@
     var AUTH_TOKEN=$('meta[name="csrf-token"]').attr('content');
     //Grab the CSRF token by jQuery and save it in AUTH_TOKEN variable
     Dropzone.autoDiscover = false;
-    var myDropzone = new Dropzone("div#mydropzone",{
-      url: "<%= request.base_url %>/uploadfiles",
+    var myDropzone = new Dropzone("#myDropzone",{
+      url: "<%= request.base_url %>/upload",
       autoProcessQueue: false,
       uploadMultiple: true,
       addRemoveLinks:true,
@@ -58,7 +46,7 @@
       successmultiple: function(data,response){
         $('#msgBoard').append(response.message).addClass("alert alert-success");
         $('#msgBoard').delay(2000).fadeOut();
-        $('#fileslist').val(response.filesList);
+        $('#fileslist').val(JSON.stringify(response.files_list));
         $('#myForm').off('submit').submit();
       }
     });
